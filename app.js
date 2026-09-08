@@ -151,7 +151,7 @@ function pickTime(x){state.time=x;renderBooking()}
 async function confirmBooking(){
   const a=$("#address")?.value?.trim();if(!state.customer.name.trim()){toast("Agrega tu nombre");return}if(!state.customer.phone.trim()){toast("Agrega un teléfono o WhatsApp");return}if(!a){toast("Agrega la dirección del servicio");return}
   state.address=a;state.step="request_sent";renderJourney();
-  await syncExperience("booked", "Reserva confirmada por cliente");
+  await syncExperience("quoted", "Cotización pendiente por confirmar");
 }
 function renderRequestSent(){
   setProgress(100);
