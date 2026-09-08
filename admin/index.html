@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BRICE — Panel de gestión</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark">B</div>
+      <div><strong>BRICE</strong><span>Detalle a domicilio</span></div>
+    </div>
+    <nav id="nav">
+      <button class="nav-item active" data-view="dashboard">⌂ <span>Resumen</span></button>
+      <button class="nav-item" data-view="reservas">▣ <span>Reservas</span><b>4</b></button>
+      <button class="nav-item" data-view="clientes">◉ <span>Clientes</span></button>
+      <button class="nav-item" data-view="vehiculos">▱ <span>Vehículos</span></button>
+      <button class="nav-item" data-view="servicios">✦ <span>Servicios</span></button>
+      <button class="nav-item" data-view="cotizaciones">◇ <span>Cotizaciones</span><b>7</b></button>
+      <button class="nav-item" data-view="referidos">↗ <span>Referidos</span></button>
+      <button class="nav-item" data-view="contenido">✎ <span>Contenido</span></button>
+    </nav>
+    <div class="sidebar-bottom">
+      <button class="nav-item" data-view="configuracion">⚙ <span>Configuración</span></button>
+      <div class="account"><div class="avatar">BR</div><div><strong>Brice Admin</strong><small>Administrador</small></div></div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <button class="mobile-menu" id="mobileMenu">☰</button>
+      <div>
+        <p class="eyebrow">PANEL DE NEGOCIO</p>
+        <h1 id="pageTitle">Resumen</h1>
+      </div>
+      <div class="top-actions">
+        <button class="icon-btn" title="Buscar" id="globalSearch">⌕</button>
+        <button class="notification" title="Notificaciones">●<span id="notificationCount">0</span></button>
+        <button class="profile">BR</button>
+      </div>
+    </header>
+
+    <section id="app" class="content"></section>
+  </main>
+
+  <div id="modal" class="modal hidden">
+    <div class="modal-card">
+      <button class="close" id="closeModal">×</button>
+      <div id="modalContent"></div>
+    </div>
+  </div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../config.js"></script>
+<script src="../supabase-client.js"></script>
+<script src="../supabase-init.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

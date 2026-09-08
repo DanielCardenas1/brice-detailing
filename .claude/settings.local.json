@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -m http.server 8000)",
+      "Bash(pkill -f \"http.server\")",
+      "Bash(timeout 2 python -m http.server 8080)",
+      "Bash(curl -s http://localhost:8080/)",
+      "Bash(curl -s http://localhost:8080/admin/index.html)"
+    ]
+  }
+}

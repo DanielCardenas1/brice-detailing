@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BRICE Car Wash Detailing — Una mejor experiencia</title>
+<meta name="description" content="Brice Car Wash Detailing. Detallado profesional a domicilio en Greenville, South Carolina.">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="site">
+  <header class="nav">
+    <a class="logo" href="#inicio" aria-label="BRICE inicio">
+      <img src="images/logo.jpg" alt="BRICE Car Wash Detailing">
+      <span class="logo-word">BRICE<small>CAR WASH <i>Detailing</i></small></span>
+    </a>
+    <nav class="desktop-nav">
+      <a href="#servicios">Servicios</a>
+      <a href="#resultados">Resultados</a>
+      <a href="#como-funciona">Cómo funciona</a>
+      <a href="#confianza">Confianza</a>
+      <a href="#faq">Preguntas frecuentes</a>
+      <a href="#contacto">Contacto</a>
+    </nav>
+    <button class="nav-cta" data-start>✦ Cuidar mi vehículo <span>→</span></button>
+    <button class="menu-btn" aria-label="Abrir menú" onclick="toggleMenu()">☰</button>
+  </header>
+
+  <div id="mobileMenu" class="mobile-menu">
+    <a href="#servicios" onclick="toggleMenu()">Servicios</a>
+    <a href="#resultados" onclick="toggleMenu()">Resultados</a>
+    <a href="#como-funciona" onclick="toggleMenu()">Cómo funciona</a>
+    <a href="#confianza" onclick="toggleMenu()">Confianza</a>
+    <a href="#faq" onclick="toggleMenu()">Preguntas frecuentes</a>
+    <button data-start onclick="toggleMenu()">✦ Cuidar mi vehículo →</button>
+  </div>
+
+  <main>
+    <section id="inicio" class="hero">
+      <div class="hero-bg"></div>
+      <div class="hero-content">
+        <div class="eyebrow">DETALLADO PROFESIONAL A DOMICILIO · GREENVILLE, SC</div>
+        <h1>Tu vehículo merece<br><em>verse así.</em></h1>
+        <p>Recuperamos su apariencia, limpiamos a fondo y protegemos lo que te importa. Nosotros vamos hasta donde está tu vehículo.</p>
+        <button class="primary hero-btn" data-start>✦ Quiero cuidar mi vehículo <span>→</span></button>
+        <small class="hero-note">Te guiamos paso a paso según lo que necesitas.</small>
+        <div class="hero-points">
+          <span>⌂ <b>A domicilio</b><small>en Greenville, SC</small></span>
+          <span>◈ <b>Resultados visibles</b><small>antes / después</small></span>
+          <span>✧ <b>Atención personalizada</b><small>sin complicaciones</small></span>
+        </div>
+      </div>
+      <div class="hero-sign">Más que un detallado,<br><strong>una mejor experiencia.</strong></div>
+    </section>
+
+    <section class="intro section-light">
+      <div class="section-kicker">BRICE · CAR WASH DETAILING</div>
+      <h2>No necesitas saber qué servicio comprar.</h2>
+      <p>Cuéntanos qué quieres mejorar y te ayudamos a encontrar la mejor forma de cuidar tu vehículo.</p>
+    </section>
+
+    <section id="servicios" class="services section-light">
+      <div class="section-head">
+        <div>
+          <div class="section-kicker dark">LO QUE PODEMOS HACER</div>
+          <h2>Nuestros <em>servicios</em></h2>
+          <p>Soluciones reales para cada necesidad de tu vehículo.</p>
+        </div>
+        <button class="outline-dark" data-start>Encontrar mi servicio →</button>
+      </div>
+      <div class="service-grid">
+        <article class="service-card" data-need="exterior">
+          <div class="service-img img-exterior"></div><div class="service-copy"><span>01</span><h3>Cuidado exterior</h3><p>Brillo, limpieza y protección para que luzca como nuevo.</p><button data-need="exterior">Ver más →</button></div>
+        </article>
+        <article class="service-card" data-need="interior">
+          <div class="service-img img-interior"></div><div class="service-copy"><span>02</span><h3>Detallado interior</h3><p>Un espacio limpio, fresco y cómodo para volver a disfrutarlo.</p><button data-need="interior">Ver más →</button></div>
+        </article>
+        <article class="service-card" data-need="rines">
+          <div class="service-img img-rines"></div><div class="service-copy"><span>03</span><h3>Rines y llantas</h3><p>Presentación y cuidado en cada detalle.</p><button data-need="rines">Ver más →</button></div>
+        </article>
+        <article class="service-card" data-need="paint">
+          <div class="service-img img-paint"></div><div class="service-copy"><span>04</span><h3>Corrección de pintura</h3><p>Recupera el brillo y mejora la apariencia de la superficie.</p><button data-need="paint">Ver más →</button></div>
+        </article>
+        <article class="service-card" data-need="motor">
+          <div class="service-img img-motor"></div><div class="service-copy"><span>05</span><h3>Limpieza de motor</h3><p>Una presentación más limpia y cuidada del compartimiento.</p><button data-need="motor">Ver más →</button></div>
+        </article>
+      </div>
+    </section>
+
+    <section id="resultados" class="results">
+      <div class="results-copy">
+        <div class="section-kicker">RESULTADOS REALES</div>
+        <h2>Resultados que<br><em>hablan por sí solos.</em></h2>
+        <p>Mira la diferencia que podemos hacer en tu vehículo. Cada servicio parte de una necesidad real.</p>
+        <button class="primary" onclick="document.querySelector('#servicios').scrollIntoView({behavior:'smooth'})">Ver nuestros servicios →</button>
+      </div>
+      <div class="result-compare">
+        <div class="result-half before"><span>ANTES</span><div class="dirty-car"></div></div>
+        <div class="result-half after"><span>DESPUÉS</span><div class="clean-car"></div></div>
+        <div class="compare-handle">↔</div>
+      </div>
+    </section>
+
+    <section id="como-funciona" class="how section-light">
+      <div class="section-kicker dark">UNA EXPERIENCIA DIFERENTE</div>
+      <h2>¿Cómo <em>funciona?</em></h2>
+      <p class="section-sub">No tienes que descubrirlo todo por tu cuenta. Nosotros te acompañamos.</p>
+      <div class="steps">
+        <div><b>1</b><span>✦</span><h3>Cuéntanos qué necesitas</h3><p>Responde unas preguntas rápidas en nuestro asistente.</p></div>
+        <div><b>2</b><span>▣</span><h3>Recibe tu cotización</h3><p>Te mostramos el servicio que tiene sentido para tu vehículo.</p></div>
+        <div><b>3</b><span>▦</span><h3>Agendamos el servicio</h3><p>Elige fecha, hora y lugar. Nosotros vamos.</p></div>
+        <div><b>4</b><span>✧</span><h3>Disfruta los resultados</h3><p>Y seguimos contigo después del servicio.</p></div>
+      </div>
+    </section>
+
+    <section class="experience-banner">
+      <div class="banner-bg"></div>
+      <div class="banner-content">
+        <div class="section-kicker">ES MOMENTO DE DARLE EL CUIDADO QUE MERECE</div>
+        <h2>Aquí comienza tu<br><em>experiencia con Brice.</em></h2>
+        <p>Te guiamos paso a paso para encontrar el servicio ideal para tu vehículo.</p>
+        <button class="primary" data-start>✦ Cuidar mi vehículo →</button>
+      </div>
+      <div class="banner-benefits">
+        <span>✧ Rápido y fácil</span><span>◈ Sin compromisos</span><span>▣ Cotización clara</span><span>✦ 100% personalizado</span>
+      </div>
+    </section>
+
+    <section id="confianza" class="trust section-light">
+      <div class="section-kicker dark">LO QUE DICEN NUESTROS CLIENTES</div>
+      <h2>Clientes que ya <em>confían en Brice.</em></h2>
+      <div class="testimonials">
+        <article><div class="avatar car-a"></div><p>“Increíble trabajo. Mi carro quedó como nuevo. Súper recomendado.”</p><b>Michael R.</b><span>★★★★★ · Google</span></article>
+        <article><div class="avatar car-b"></div><p>“Puntuales, profesionales y con una atención excelente.”</p><b>Sarah T.</b><span>★★★★★ · Google</span></article>
+        <article><div class="avatar car-c"></div><p>“La diferencia es real. Definitivamente volveré a reservar.”</p><b>James L.</b><span>★★★★★ · Google</span></article>
+      </div>
+    </section>
+
+    <section class="brand-story">
+      <div class="story-photo"></div>
+      <div class="story-copy">
+        <div class="section-kicker">UNA MARCA QUE VA CONTIGO</div>
+        <h2>Cuidamos<br><em>lo que te mueve.</em></h2>
+        <p>Brice nació para llevar el cuidado profesional hasta tu vehículo, con atención al detalle y una experiencia sencilla desde el primer contacto.</p>
+        <button class="outline-light" data-start>Conocer qué necesita mi vehículo →</button>
+      </div>
+    </section>
+
+    <section id="faq" class="faq section-light">
+      <div class="section-head">
+        <div><div class="section-kicker dark">PREGUNTAS FRECUENTES</div><h2>Resuelve tus dudas <em>antes de empezar.</em></h2></div>
+        <button class="outline-dark" data-start>Hablar con Brice →</button>
+      </div>
+      <div class="faq-grid">
+        <details><summary>¿En qué áreas ofrecen el servicio? <b>+</b></summary><p>Atendemos en Greenville, SC y el área definida por Brice.</p></details>
+        <details><summary>¿Tienen diferentes servicios? <b>+</b></summary><p>Sí. El asistente te ayuda a definir qué tiene sentido según lo que quieres mejorar.</p></details>
+        <details><summary>¿Cuánto tiempo dura el servicio? <b>+</b></summary><p>Depende del estado del vehículo y del servicio elegido. Lo definimos contigo antes de agendar.</p></details>
+        <details><summary>¿Necesito estar presente? <b>+</b></summary><p>Te indicamos lo necesario antes de la cita para que todo sea sencillo.</p></details>
+        <details><summary>¿Qué productos utilizan? <b>+</b></summary><p>Trabajamos con productos profesionales adecuados para cada superficie.</p></details>
+        <details><summary>¿Puedo agregar algo después de ver el precio? <b>+</b></summary><p>Sí. Los adicionales aparecen después de definir y cotizar tu servicio base.</p></details>
+      </div>
+    </section>
+  <!-- BRICE_MASTER_DESIGN -->
+
+
+</main>
+
+  <footer id="contacto" class="footer">
+    <div class="footer-brand">
+      <img src="images/logo.jpg" alt="BRICE">
+      <p>Más que un servicio,<br>una mejor experiencia.</p>
+      <div class="socials"><button>◎</button><button>f</button><button>♪</button></div>
+    </div>
+    <div><h4>Enlaces</h4><a href="#inicio">Inicio</a><a href="#servicios">Servicios</a><a href="#resultados">Resultados</a><a href="#como-funciona">Cómo funciona</a><a href="#confianza">Testimonios</a><a href="#faq">Preguntas frecuentes</a></div>
+    <div><h4>Contacto</h4><p>⌖ Greenville, SC</p><p>⌕ +1 (864) 555-0123</p><p>✉ info@bricedetailing.com</p><p>◷ Lun–Sáb · 8:00 a.m.–6:00 p.m.</p><button class="whatsapp" onclick="toast('Abrir WhatsApp de Brice')">◉ Escríbenos por WhatsApp →</button></div>
+    <div class="footer-car"><div class="footer-car-shape"></div><span>Cuidamos<br><b>lo que te mueve.</b></span></div>
+    <div class="copyright">© 2026 Brice Car Detailing. Todos los derechos reservados.<span>Diseñado para una mejor experiencia.</span></div>
+  </footer>
+</div>
+
+<!-- Guided experience -->
+<div id="journey" class="journey" aria-hidden="true">
+  <div class="journey-backdrop" onclick="closeJourney()"></div>
+  <div class="journey-panel">
+    <header class="journey-top">
+      <button class="j-logo" onclick="closeJourney()"><img src="images/logo.jpg" alt="BRICE"></button>
+      <div class="j-progress"><span id="jProgress"></span></div>
+      <button class="close" onclick="closeJourney()">×</button>
+    </header>
+    <div id="journeyScreen" class="journey-screen"></div>
+  </div>
+</div>
+<div id="toast"></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<script src="supabase-client.js"></script>
+<script src="supabase-init.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
