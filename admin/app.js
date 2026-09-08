@@ -9,7 +9,7 @@ const data={
     {cliente:"Cliente de ejemplo",marca:"Toyota",modelo:"RAV4",año:"2024",placa:"ABC-123",servicios:1}
   ],
   cotizaciones:[
-    {id:"#C-1000",cliente:"Cliente de ejemplo",detalle:"RAV4 · Detailing completo",total:"$370.000",fecha:"Hoy",estado:"Por agendar"}
+    {id:"#C-1000",cliente:"Cliente de ejemplo",vehiculo:"Toyota RAV4",detalle:"Detailing completo",total:"$370.000",fecha:"Hoy",estado:"Por agendar"}
   ],
   referidos:[
     {cliente:"Cliente de ejemplo",codigo:"BRICE-EJEMPLO",referidos:1,conversiones:1,beneficio:"$20.000"}
