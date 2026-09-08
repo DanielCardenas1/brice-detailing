@@ -57,7 +57,7 @@ function liveCounts(){
 function updateNavCounts(){
   const c=liveCounts();
   const res=document.querySelector('[data-view="reservas"] b'); if(res)res.textContent=c.all;
-  const quotes=document.querySelector('[data-view="cotizaciones"] b'); if(quotes)quotes.textContent=data.cotizaciones.length+liveExperiences.filter(x=>["quoted","accepted","booked"].includes(x.status)).length;
+  const quotes=document.querySelector('[data-view="cotizaciones"] b'); if(quotes)quotes.textContent=data.cotizaciones.length+liveExperiences.filter(x=>["quoted","accepted"].includes(x.status)).length;
   const n=document.getElementById('notificationCount');
   if(n){
     const activity=liveActivityItems();
@@ -201,7 +201,7 @@ function updateDashboardLive(){
   const dr=document.getElementById('dashboardReservations');
   if(dr){ const rows=[...live.slice(0,4),...data.reservas.slice(0,Math.max(0,4-live.length))]; dr.innerHTML=table(["Cliente","Vehículo","Servicio","Fecha","Estado"],rows.map(r=>`<tr><td><div class="person"><div class="mini-avatar">${initials(r.cliente)}</div>${r.cliente}</div></td><td>${r.vehiculo}</td><td>${r.servicio}</td><td>${r.fecha}</td><td>${badge(r._live?'Confirmada':r.estado)}</td></tr>`)); }
   const sc=document.getElementById('statBookings'); if(sc) sc.textContent=all.length;
-  const sq=document.getElementById('statQuotes'); if(sq) sq.textContent=data.cotizaciones.length+liveExperiences.filter(x=>["quoted","accepted","booked"].includes(x.status)).length;
+  const sq=document.getElementById('statQuotes'); if(sq) sq.textContent=data.cotizaciones.length+liveExperiences.filter(x=>["quoted","accepted"].includes(x.status)).length;
   const sl=document.getElementById('statClients'); if(sl) sl.textContent=data.clientes.length+new Set(liveBookings.map(b=>bookingInfo(b).cliente)).size;
   const sv=document.getElementById('statVehicles'); if(sv) sv.textContent=data.vehiculos.length+new Set(liveBookings.map(b=>bookingInfo(b).vehiculo)).size;
   renderRecentActivity();
@@ -287,7 +287,7 @@ function experienceQuoteInfo(e){
  const rejected=(p.rejected||[]).map(k=>labels[k]||k);
  return {id:`#LIVE-${String(e.id||"").slice(0,6).toUpperCase()}`,cliente:c.name||"Cliente nuevo",tel:c.phone||"",vehiculo:[v.make,v.model].filter(Boolean).join(" ")||"Vehículo por definir",detalle:included.join(" + ")||"Servicio personalizado",total:Number(p.total||0),fecha:formatDate(e.updated_at||e.created_at).split(",")[0],estado:e.status,experience:e,included,rejected,extras:p.extras||[],payload:p};
 }
-function liveQuoteRows(){return liveExperiences.filter(e=>["quoted","accepted","booked"].includes(e.status)).map(e=>({...experienceQuoteInfo(e),_live:true}))}
+function liveQuoteRows(){return liveExperiences.filter(e=>["quoted","accepted"].includes(e.status)).map(e=>({...experienceQuoteInfo(e),_live:true}))}
 function cotizaciones(){
  const render=()=>{
    const liveQuotes=liveQuoteRows();
