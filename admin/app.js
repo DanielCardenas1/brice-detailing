@@ -1,32 +1,18 @@
 const data={
   reservas:[
-    {cliente:"Juan Pérez",vehiculo:"Mazda CX-5",servicio:"Detailing completo",fecha:"Hoy · 10:00",estado:"Confirmada"},
-    {cliente:"Laura Gómez",vehiculo:"Toyota Corolla",servicio:"Interior premium",fecha:"Hoy · 14:00",estado:"Pendiente"},
-    {cliente:"Andrés Ruiz",vehiculo:"BMW X3",servicio:"Protección cerámica",fecha:"Mañana · 09:00",estado:"Confirmada"},
-    {cliente:"Camila Torres",vehiculo:"Kia Sportage",servicio:"Lavado premium",fecha:"Mañana · 15:30",estado:"Pendiente"}
+    {cliente:"Cliente de ejemplo",vehiculo:"Toyota RAV4",servicio:"Detailing completo",fecha:"Hoy · 10:00",estado:"Confirmada"}
   ],
   clientes:[
-    {nombre:"Juan Pérez",tel:"310 555 0182",vehiculos:1,ultimo:"Detailing completo",fecha:"15/06/2026"},
-    {nombre:"Laura Gómez",tel:"315 222 4810",vehiculos:1,ultimo:"Interior premium",fecha:"03/08/2026"},
-    {nombre:"Andrés Ruiz",tel:"300 440 9120",vehiculos:2,ultimo:"Protección cerámica",fecha:"22/05/2026"},
-    {nombre:"Camila Torres",tel:"318 771 0091",vehiculos:1,ultimo:"Lavado premium",fecha:"18/08/2026"},
-    {nombre:"Santiago Díaz",tel:"301 887 1022",vehiculos:1,ultimo:"Detailing exterior",fecha:"11/07/2026"}
+    {nombre:"Cliente de ejemplo",tel:"300 000 0000",vehiculos:1,ultimo:"Detailing completo",fecha:"Hoy"}
   ],
   vehiculos:[
-    {cliente:"Juan Pérez",marca:"Mazda",modelo:"CX-5",año:"2024",placa:"ABC-123",servicios:3},
-    {cliente:"Laura Gómez",marca:"Toyota",modelo:"Corolla",año:"2022",placa:"DEF-456",servicios:2},
-    {cliente:"Andrés Ruiz",marca:"BMW",modelo:"X3",año:"2023",placa:"GHI-789",servicios:4},
-    {cliente:"Andrés Ruiz",marca:"Ford",modelo:"Explorer",año:"2021",placa:"JKL-012",servicios:1}
+    {cliente:"Cliente de ejemplo",marca:"Toyota",modelo:"RAV4",año:"2024",placa:"ABC-123",servicios:1}
   ],
   cotizaciones:[
-    {id:"#C-1048",cliente:"Juan Pérez",detalle:"CX-5 · Detailing + protección",total:"$370.000",fecha:"Hoy",estado:"Por agendar"},
-    {id:"#C-1047",cliente:"María López",detalle:"Kia Seltos · Interior",total:"$150.000",fecha:"Hoy",estado:"Enviada"},
-    {id:"#C-1046",cliente:"Andrés Ruiz",detalle:"BMW X3 · Cerámica",total:"$250.000",fecha:"Ayer",estado:"Aceptada"}
+    {id:"#C-1000",cliente:"Cliente de ejemplo",detalle:"RAV4 · Detailing completo",total:"$370.000",fecha:"Hoy",estado:"Por agendar"}
   ],
   referidos:[
-    {cliente:"Juan Pérez",codigo:"BRICE-JUAN",referidos:3,conversiones:2,beneficio:"$40.000"},
-    {cliente:"Camila Torres",codigo:"BRICE-CAMI",referidos:2,conversiones:1,beneficio:"$20.000"},
-    {cliente:"Andrés Ruiz",codigo:"BRICE-ANDRES",referidos:1,conversiones:1,beneficio:"$20.000"}
+    {cliente:"Cliente de ejemplo",codigo:"BRICE-EJEMPLO",referidos:1,conversiones:1,beneficio:"$20.000"}
   ]
 };
 const services=[
@@ -138,19 +124,16 @@ function layout(title,desc,action){return `<div class="hero"><div><p class="eyeb
 function dashboard(){
  app.innerHTML=layout("Buenos días, Brice.","Todo lo que está pasando con tus clientes, vehículos y servicios en un solo lugar.",`<button class="btn primary" onclick="openNewReservation()">+ Nueva reserva</button>`)
  +`<div class="cards">
-   <button class="stat stat-click" onclick="navigate('clientes')"><div class="stat-top">Clientes <span>↗</span></div><div class="stat-value" id="statClients">126</div><div class="trend">Ver clientes</div></button>
-   <button class="stat stat-click" onclick="navigate('vehiculos')"><div class="stat-top">Vehículos <span>↗</span></div><div class="stat-value" id="statVehicles">148</div><div class="trend">Ver vehículos</div></button>
-   <button class="stat stat-click" onclick="navigate('cotizaciones')"><div class="stat-top">Cotizaciones <span>↗</span></div><div class="stat-value" id="statQuotes">7</div><div class="trend">Ver cotizaciones</div></button>
-   <button class="stat stat-click" onclick="navigate('reservas')"><div class="stat-top">Reservas próximas <span>↗</span></div><div class="stat-value" id="statBookings">4</div><div class="trend">Ver reservas</div></button>
+   <button class="stat stat-click" onclick="navigate('clientes')"><div class="stat-top">Clientes <span>↗</span></div><div class="stat-value" id="statClients">${data.clientes.length}</div><div class="trend">Ver clientes</div></button>
+   <button class="stat stat-click" onclick="navigate('vehiculos')"><div class="stat-top">Vehículos <span>↗</span></div><div class="stat-value" id="statVehicles">${data.vehiculos.length}</div><div class="trend">Ver vehículos</div></button>
+   <button class="stat stat-click" onclick="navigate('cotizaciones')"><div class="stat-top">Cotizaciones <span>↗</span></div><div class="stat-value" id="statQuotes">${data.cotizaciones.length}</div><div class="trend">Ver cotizaciones</div></button>
+   <button class="stat stat-click" onclick="navigate('reservas')"><div class="stat-top">Reservas próximas <span>↗</span></div><div class="stat-value" id="statBookings">${data.reservas.length}</div><div class="trend">Ver reservas</div></button>
  </div>
  <div class="grid2">
    <div class="panel"><div class="panel-head"><h3>Próximas reservas</h3><button class="btn ghost" onclick="navigate('reservas')">Ver todas</button></div>
    <div id="dashboardReservations">${table(["Cliente","Vehículo","Servicio","Fecha","Estado"],data.reservas.slice(0,4).map(r=>`<tr><td><div class="person"><div class="mini-avatar">${initials(r.cliente)}</div>${r.cliente}</div></td><td>${r.vehiculo}</td><td>${r.servicio}</td><td>${r.fecha}</td><td>${badge(r.estado)}</td></tr>`))}</div></div>
    <div class="panel"><div class="panel-head"><h3>Actividad reciente</h3><span>Últimos movimientos</span></div><div class="timeline" id="recentActivity">
-    <div class="event"><div class="dot"></div><div><strong>Juan Pérez aceptó una cotización</strong><span>Hace 12 minutos · $370.000</span></div></div>
-    <div class="event"><div class="dot"></div><div><strong>Nueva reserva de Laura Gómez</strong><span>Hace 1 hora · Interior premium</span></div></div>
-    <div class="event"><div class="dot"></div><div><strong>Nuevo referido convertido</strong><span>Ayer · Código BRICE-JUAN</span></div></div>
-    <div class="event"><div class="dot"></div><div><strong>Servicio actualizado</strong><span>Ayer · Lavado premium</span></div></div>
+    <div class="event"><div class="dot"></div><div><strong>Ejemplo: reserva creada</strong><span>Los movimientos reales de tus clientes aparecerán aquí.</span></div></div>
    </div></div>
  </div>
  <div id="liveConnection" class="panel" style="margin-top:18px"><div class="panel-head"><h3>Experiencia en vivo</h3><span id="liveStatus">Conectando…</span></div><div id="liveExperiences" class="list"><div class="list-item"><div class="list-main"><strong>Esperando actividad del cliente</strong><span>Abre la experiencia pública en otra pestaña y prueba el recorrido.</span></div></div></div></div>`;
@@ -335,7 +318,13 @@ function configuracion(){
 }
 function openNewReservation(){showModal(`<h2>Nueva reserva</h2><div class="form-grid"><div class="field"><label>Cliente</label><input id="nrName" placeholder="Nombre"></div><div class="field"><label>Teléfono</label><input id="nrPhone" placeholder="WhatsApp"></div><div class="field"><label>Vehículo</label><input id="nrVehicle" placeholder="Marca y modelo"></div><div class="field"><label>Servicio</label><select id="nrService"><option value="Detailing completo">Detailing completo</option><option value="Interior premium">Interior premium</option><option value="Protección cerámica">Protección cerámica</option><option value="Detailing exterior">Detailing exterior</option></select></div><div class="field"><label>Fecha</label><input id="nrDate" type="date"></div><div class="field"><label>Hora</label><input id="nrTime" type="time"></div></div><div class="field"><label>Dirección</label><input id="nrAddress" placeholder="Lugar del servicio a domicilio"></div><button class="btn primary" onclick="saveNewReservation()">Crear reserva</button>`)}
 async function saveNewReservation(){
- const payload={customer:{name:document.getElementById('nrName')?.value?.trim()||'Cliente creado desde panel',phone:document.getElementById('nrPhone')?.value?.trim()||''},vehicle:{make:(document.getElementById('nrVehicle')?.value||'Vehículo').split(' ')[0],model:(document.getElementById('nrVehicle')?.value||'').split(' ').slice(1).join(' ')},included:[],needs:[],extras:[],date:document.getElementById('nrDate')?.value||'Por definir',time:document.getElementById('nrTime')?.value||'Por definir',address:document.getElementById('nrAddress')?.value?.trim()||'',total:0,step:'admin'};
+ const dateVal=document.getElementById('nrDate')?.value||'';
+ const timeVal=document.getElementById('nrTime')?.value||'';
+ if(dateVal && timeVal && window.briceDB?.hasConflict?.(dateVal,timeVal)){
+   alert('Ya existe una reserva a menos de 2 horas de este horario. Elige otro horario con al menos 2 horas de diferencia.');
+   return;
+ }
+ const payload={customer:{name:document.getElementById('nrName')?.value?.trim()||'Cliente creado desde panel',phone:document.getElementById('nrPhone')?.value?.trim()||''},vehicle:{make:(document.getElementById('nrVehicle')?.value||'Vehículo').split(' ')[0],model:(document.getElementById('nrVehicle')?.value||'').split(' ').slice(1).join(' ')},included:[],needs:[],extras:[],date:dateVal||'Por definir',time:timeVal||'Por definir',address:document.getElementById('nrAddress')?.value?.trim()||'',total:0,step:'admin'};
  const service=document.getElementById('nrService')?.value||'Detailing completo'; payload.service_name=service;
  if(window.briceDB){await briceDB.createBooking(payload); liveBookings=await briceDB.getRecentBookings(50);}
  document.getElementById('modal').classList.add('hidden'); reservationsFilter='all'; reservas(); updateNavCounts(); alert('Reserva creada y disponible en tiempo real.');
@@ -377,6 +366,10 @@ async function confirmLiveQuote(experienceId, changedSchedule=false){
  let date=e.payload?.date||'Por definir', time=e.payload?.time||'Por definir';
  if(changedSchedule){date=document.getElementById('liveConfirmDate')?.value?.trim()||date;time=document.getElementById('liveConfirmTime')?.value?.trim()||time;}
  if(!date||!time){alert('Indica fecha y hora para confirmar la reserva.');return;}
+ if(window.briceDB?.hasConflict?.(date,time,{excludeExperienceId:experienceId})){
+   alert('Ya existe otra reserva a menos de 2 horas de este horario. Elige un horario con al menos 2 horas de diferencia.');
+   return;
+ }
  const result=await briceDB.confirmExperience(experienceId,{date,time});
  if(result?.error){console.error(result.error);alert('No se pudo crear la reserva. Revisa la conexión con Supabase.');return;}
  if(result?.already){

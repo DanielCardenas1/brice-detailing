@@ -4,7 +4,7 @@ const state={
   needs:[], included:[], rejected:[], index:0, step:"start",
   vehicle:{make:"Toyota",model:"RAV4"},
   customer:{name:"",phone:""},
-  details:[], extras:[], date:"Jue 11",time:"2:00 p.m.",
+  details:[], extras:[], date:new Date().toISOString().slice(0,10),time:"8:00 a.m.",
   prices:{exterior:80,interior:90,rines:50,motor:40,paint:60},
   data:{
     exterior:{name:"Cuidado exterior",desc:"Lavado, limpieza detallada y acabado exterior.",includes:["Lavado detallado","Vidrios y superficies exteriores","Emblemas y zonas de difícil acceso","Secado y acabado"],result:"Un exterior limpio, uniforme y mejor presentado."},
@@ -17,6 +17,13 @@ const state={
 function money(n){return "$"+Number(n).toLocaleString("en-US")}
 function baseTotal(){return state.included.reduce((a,k)=>a+(state.prices[k]||0),0)}
 function total(){return baseTotal()+state.extras.reduce((a,x)=>a+x.price,0)}
+const WEEKDAYS=["Dom","Lun","Mar","Mié","Jue","Vie","Sáb"];
+function dayLabel(iso){try{const d=new Date(iso+"T00:00:00");return `${WEEKDAYS[d.getDay()]} ${d.getDate()}`}catch{return iso||""}}
+function nextDays(n=6){const out=[],base=new Date();for(let i=0;i<n;i++){const d=new Date(base);d.setDate(base.getDate()+i);out.push(d.toISOString().slice(0,10))}return out}
+function isSlotTaken(dateIso,timeLabel){
+  if(!window.briceDB?.hasConflict) return false;
+  return window.briceDB.hasConflict(dateIso,timeLabel,{excludeExperienceId:window.BRICE_DB?.experienceId});
+}
 function openJourney(preselect=null){
   state.needs=[];state.included=[];state.rejected=[];state.index=0;state.details=[];state.extras=[];state.customer={name:"",phone:""};state.address="";
   if(preselect){state.needs=[preselect];state.included=[];state.index=0;state.step="breakdown"; renderJourney()}
@@ -140,29 +147,32 @@ function toggleExtra(i){const x=state.available[i],j=state.extras.findIndex(e=>e
 function toBooking(){state.step="booking";renderJourney()}
 function renderBooking(){
   setProgress(91);
-  shell("renderQuote()","SOLICITUD DE RESERVA","¿Cuándo te gustaría<br>que vayamos?","Indica tu horario preferido. Brice lo revisará y confirmará la reserva o te propondrá otro momento.",`
-  <div class="j-card"><h3>Fecha</h3><div class="j-chips">${["Mié 10","Jue 11","Vie 12","Sáb 13"].map(x=>`<button class="j-chip ${state.date===x?"active":""}" onclick="pickDate('${x}')">${x}</button>`).join("")}</div><div style="height:13px"></div><h3>Hora</h3><div class="j-chips">${["8:00 a.m.","10:00 a.m.","12:00 p.m.","2:00 p.m.","4:00 p.m."].map(x=>`<button class="j-chip ${state.time===x?"active":""}" onclick="pickTime('${x}')">${x}</button>`).join("")}</div></div>
+  if(state.time && isSlotTaken(state.date,state.time)) state.time="";
+  shell("renderQuote()","SOLICITUD DE RESERVA","¿Cuándo te gustaría<br>que vayamos?","Indica tu horario preferido. Cada horario deja al menos 2 horas de diferencia con otras reservas.",`
+  <div class="j-card"><h3>Fecha</h3><div class="j-chips">${nextDays(6).map(iso=>`<button class="j-chip ${state.date===iso?"active":""}" onclick="pickDate('${iso}')">${dayLabel(iso)}</button>`).join("")}</div><div style="height:13px"></div><h3>Hora</h3><div class="j-chips">${["8:00 a.m.","10:00 a.m.","12:00 p.m.","2:00 p.m.","4:00 p.m."].map(x=>{const taken=isSlotTaken(state.date,x);return `<button class="j-chip ${state.time===x?"active":""} ${taken?"disabled":""}" ${taken?"disabled":""} onclick="${taken?"":`pickTime('${x}')`}">${x}${taken?" · Ocupado":""}</button>`}).join("")}</div><p class="j-note" style="margin-top:10px">Los horarios marcados como "Ocupado" ya tienen una reserva a menos de 2 horas de diferencia.</p></div>
   <div class="j-card"><h3>¿Cómo te contactamos?</h3><div class="j-fields"><input value="${state.customer.name}" placeholder="Tu nombre" oninput="state.customer.name=this.value" class="j-address"><input value="${state.customer.phone}" placeholder="WhatsApp / teléfono" oninput="state.customer.phone=this.value" class="j-address"></div></div>
   <div class="j-card"><h3>Dirección del servicio</h3><input id="address" value="${state.address||""}" placeholder="Escribe la dirección donde está tu vehículo" class="j-address"></div>
   <div class="j-actions"><button class="j-primary" onclick="confirmBooking()">Enviar solicitud · ${money(total())}</button></div>`)
 }
-function pickDate(x){state.date=x;renderBooking()}
-function pickTime(x){state.time=x;renderBooking()}
+function pickDate(x){state.date=x;if(isSlotTaken(state.date,state.time))state.time="";renderBooking()}
+function pickTime(x){if(isSlotTaken(state.date,x)){toast("Ese horario ya está ocupado. Elige otro con al menos 2 horas de diferencia.");return}state.time=x;renderBooking()}
 async function confirmBooking(){
   const a=$("#address")?.value?.trim();if(!state.customer.name.trim()){toast("Agrega tu nombre");return}if(!state.customer.phone.trim()){toast("Agrega un teléfono o WhatsApp");return}if(!a){toast("Agrega la dirección del servicio");return}
+  if(!state.time){toast("Elige un horario disponible");return}
+  if(isSlotTaken(state.date,state.time)){toast("Ese horario ya no está disponible. Elige otro.");renderBooking();return}
   state.address=a;state.step="request_sent";renderJourney();
   await syncExperience("quoted", "Cotización pendiente por confirmar");
 }
 function renderRequestSent(){
   setProgress(100);
   shell(null,"RESERVA CONFIRMADA","Tu servicio está<br>confirmado.","Te enviaremos la información necesaria. Brice puede contactarte para confirmar detalles o ajustar el horario si es necesario.",`
-  <div class="j-success"><div class="big">✓</div><div class="j-card" style="text-align:left"><div class="j-summary-row"><div><strong>Horario solicitado</strong><small>${state.date} · ${state.time}</small></div></div><div class="j-summary-row"><div><strong>Servicio</strong><small>${state.included.map(k=>state.data[k].name).join(" + ")}</small></div></div><div class="j-summary-row"><div><strong>Total</strong><small>${money(total())}</small></div></div></div></div>
+  <div class="j-success"><div class="big">✓</div><div class="j-card" style="text-align:left"><div class="j-summary-row"><div><strong>Horario solicitado</strong><small>${dayLabel(state.date)} · ${state.time}</small></div></div><div class="j-summary-row"><div><strong>Servicio</strong><small>${state.included.map(k=>state.data[k].name).join(" + ")}</small></div></div><div class="j-summary-row"><div><strong>Total</strong><small>${money(total())}</small></div></div></div></div>
   <div class="j-actions"><button class="j-primary" onclick="closeJourney()">Cerrar experiencia</button></div>`)
 }
 function renderSuccess(){
   setProgress(100);
   shell(null,"LISTO","Tu servicio está<br>confirmado.","Nos vemos en tu vehículo. Te enviaremos la información necesaria antes de la cita.",`
-  <div class="j-success"><div class="big">✓</div><div class="j-card" style="text-align:left"><div class="j-summary-row"><div><strong>Fecha</strong><small>${state.date} · ${state.time}</small></div></div><div class="j-summary-row"><div><strong>Ubicación</strong><small>${state.address}</small></div></div><div class="j-summary-row"><div><strong>Servicio</strong><small>${state.included.map(k=>state.data[k].name).join(" + ")}</small></div></div><div class="j-summary-row"><div><strong>Total</strong><small>${money(total())}</small></div></div></div></div>
+  <div class="j-success"><div class="big">✓</div><div class="j-card" style="text-align:left"><div class="j-summary-row"><div><strong>Fecha</strong><small>${dayLabel(state.date)} · ${state.time}</small></div></div><div class="j-summary-row"><div><strong>Ubicación</strong><small>${state.address}</small></div></div><div class="j-summary-row"><div><strong>Servicio</strong><small>${state.included.map(k=>state.data[k].name).join(" + ")}</small></div></div><div class="j-summary-row"><div><strong>Total</strong><small>${money(total())}</small></div></div></div></div>
   <div class="j-actions"><button class="j-primary" onclick="closeJourney()">Cerrar experiencia</button></div>`)
 }
 function experiencePayload(){return {customer:state.customer,vehicle:state.vehicle,needs:state.needs,included:state.included,rejected:state.rejected,details:state.details,extras:state.extras,date:state.date,time:state.time,address:state.address||null,total:total(),step:state.step};}

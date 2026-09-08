@@ -20,6 +20,45 @@
   const boot=()=>{if(window.supabase){try{window.BRICE_DB.client=window.supabase.createClient(cfg.supabaseUrl,cfg.supabaseKey)}catch(e){console.warn('[BRICE] Supabase unavailable',e)}}};
   if(configured){if(window.supabase)boot();else window.addEventListener('supabase-ready',boot,{once:true})}
 
+  const MIN_GAP_MINUTES=120;
+  function timeToMinutes(raw){
+    if(!raw) return null;
+    const s=String(raw).trim().toLowerCase();
+    let m=s.match(/^(\d{1,2}):(\d{2})\s*(a\.?m\.?|p\.?m\.?)$/);
+    if(m){let h=parseInt(m[1],10)%12;if(m[3][0]==='p')h+=12;return h*60+parseInt(m[2],10);}
+    m=s.match(/^(\d{1,2}):(\d{2})$/);
+    if(m){return parseInt(m[1],10)*60+parseInt(m[2],10);}
+    return null;
+  }
+  function getActiveSlots(opts={}){
+    const {excludeExperienceId,excludeBookingId}=opts;
+    const {experiences,bookings}=readLocal();
+    const slots=[];
+    (experiences||[]).forEach(e=>{
+      if(!e||!['quoted','accepted','booked'].includes(e.status)) return;
+      if(!e.payload?.date||!e.payload?.time) return;
+      if(excludeExperienceId && String(e.id)===String(excludeExperienceId)) return;
+      slots.push({date:e.payload.date,time:e.payload.time,source:'experience',id:e.id});
+    });
+    (bookings||[]).forEach(b=>{
+      if(!b||!b.payload?.date||!b.payload?.time) return;
+      if(excludeBookingId && String(b.id)===String(excludeBookingId)) return;
+      if(excludeExperienceId && String(b.experience_id||'')===String(excludeExperienceId)) return;
+      slots.push({date:b.payload.date,time:b.payload.time,source:'booking',id:b.id});
+    });
+    return slots;
+  }
+  function hasConflict(date,time,opts={}){
+    const mins=timeToMinutes(time);
+    if(mins==null||!date) return false;
+    return getActiveSlots(opts).some(s=>{
+      if(s.date!==date) return false;
+      const other=timeToMinutes(s.time);
+      if(other==null) return false;
+      return Math.abs(other-mins)<MIN_GAP_MINUTES;
+    });
+  }
+
   function briceActivity(status,payload){
     const p=payload||{},c=p.customer||{},v=p.vehicle||{};const vehicle=[v.make,v.model].filter(Boolean).join(' ')||'Vehículo por definir';
     const labels={quoted:'Cotización pendiente por confirmar',accepted:'Cotización aceptada',booked:'Reserva creada',reviewing:'Cliente está revisando el servicio',in_progress:'Recorrido iniciado'};
@@ -27,6 +66,10 @@
     return {status,label:labels[status]||status,title:titles[status]||`${c.name||'Cliente nuevo'} · ${vehicle}`,at:new Date().toISOString(),total:Number(p.total||0)};
   }
   window.briceDB={
+    MIN_GAP_MINUTES,
+    timeToMinutes,
+    getActiveSlots,
+    hasConflict,
     async createExperience(payload={}){
       const db=window.BRICE_DB;
       // LOCAL FIRST: the prototype must work even when Supabase is unavailable.
